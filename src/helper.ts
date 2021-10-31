@@ -145,12 +145,14 @@ export const CheckWebGPU = () => {
 
     const canvas = document.getElementById('canvas-webgpu') as HTMLCanvasElement;
     const div = document.getElementsByClassName('item2')[0] as HTMLDivElement;
-    canvas.width  = div.offsetWidth;
-    canvas.height = div.offsetHeight;
+    canvas.width  = div.clientWidth;
+    canvas.height = div.clientHeight;
+    if(div.clientWidth < div.clientHeight) canvas.height  = div.clientWidth;
 
     function windowResize() {
-        canvas.width  = div.offsetWidth;
-        canvas.height = div.offsetHeight;
+        canvas.width  = div.clientWidth;
+        canvas.height = div.clientHeight;
+        if(div.clientWidth < div.clientHeight) canvas.height  = div.clientWidth;
     };
     window.addEventListener('resize', windowResize);
     
