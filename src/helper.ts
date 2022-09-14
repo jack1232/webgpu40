@@ -97,18 +97,18 @@ export const InitGPU = async () => {
     const adapter = await navigator.gpu?.requestAdapter();
     const device = await adapter?.requestDevice() as GPUDevice;
     const context = canvas.getContext('webgpu') as GPUCanvasContext;
-
-    const devicePixelRatio = window.devicePixelRatio || 1;
+ /*const devicePixelRatio = window.devicePixelRatio || 1;
     const size = [
         canvas.clientWidth * devicePixelRatio,
         canvas.clientHeight * devicePixelRatio,
-    ];
-    const format = context.getPreferredFormat(adapter!);
-
+    ];*/
+    //const format = context.getPreferredFormat(adapter!);
+    const format = navigator.gpu.getPreferredCanvasFormat();
     context.configure({
         device: device,
         format: format,
-        size: size
+        //size: size
+        alphaMode:'opaque'
     });
     return{ device, canvas, format, context };
 };
@@ -145,14 +145,12 @@ export const CheckWebGPU = () => {
 
     const canvas = document.getElementById('canvas-webgpu') as HTMLCanvasElement;
     const div = document.getElementsByClassName('item2')[0] as HTMLDivElement;
-    canvas.width  = div.clientWidth;
-    canvas.height = div.clientHeight;
-    if(div.clientWidth < div.clientHeight) canvas.height  = div.clientWidth;
+    canvas.width  = div.offsetWidth;
+    canvas.height = div.offsetHeight;
 
     function windowResize() {
-        canvas.width  = div.clientWidth;
-        canvas.height = div.clientHeight;
-        if(div.clientWidth < div.clientHeight) canvas.height  = div.clientWidth;
+        canvas.width  = div.offsetWidth;
+        canvas.height = div.offsetHeight;
     };
     window.addEventListener('resize', windowResize);
     

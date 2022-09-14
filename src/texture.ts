@@ -17,6 +17,7 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
  
     const shader = Shaders(lightInputs);
     const pipeline = device.createRenderPipeline({
+        layout:'auto',
         vertex: {
             module: device.createShaderModule({                    
                 code: shader.vertex
@@ -144,15 +145,15 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
     const renderPassDescription = {
         colorAttachments: [{
             view: textureView,
-            loadValue: { r: 0.2, g: 0.247, b: 0.314, a: 1.0 }, //background color
+            clearValue: { r: 0.2, g: 0.247, b: 0.314, a: 1.0 }, //background color
+            loadOp:'clear',
             storeOp: 'store'
         }],
         depthStencilAttachment: {
             view: depthTexture.createView(),
-            depthLoadValue: 1.0,
+            depthClearValue: 1.0,
+            depthLoadOp:'clear',
             depthStoreOp: "store",
-            stencilLoadValue: 0,
-            stencilStoreOp: "store"
         }
     };
     
@@ -188,7 +189,7 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
         renderPass.setVertexBuffer(2, uvBuffer);
         renderPass.setBindGroup(0, uniformBindGroup);       
         renderPass.draw(numberOfVertices);
-        renderPass.endPass();
+        renderPass.end();
 
         device.queue.submit([commandEncoder.finish()]);
     }
